@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños Mi Amor!</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fuentes Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <!-- Encabezado -->
+        <header class="header">
+            <div class="dibujo-container">
+                <img src="assets/images/Cumple.jpg" alt="Foto especial" class="dibujo">
+                <div class="corazon-flotante">💙</div>
+            </div>
+            <h1 class="title">¡Feliz Cumpleaños <span class="nombre">Mon Amur</span>!</h1>
+            <p class="subtitle">El día más especial para la persona más especial</p>
+        </header>
+
+        <!-- Sección de mensajes -->
+        <section class="mensajes">
+            <div class="mensaje-card">
+                <i class="fas fa-heart icono"></i>
+                <h2>Para Carito:</h2>
+                <p>Como vez, ando presumiendo de la ingeniería haciendo este regalo muy especial solo para ti. Nunca creí encontrarme con una persona como tu, eres realmente maravillosa y aunque puede que el estudio no sea del todo tuyo, eso no le quita el merito a todo lo demás que puedes hacer, simplemente necesitas una guía, quizá yo no pueda serlo, pero estaré ahí para acompañarte siempre y cuando tu lo decidas. Te amo.</p>
+            </div>
+            
+            <div class="mensaje-card">
+                <i class="fas fa-star icono"></i>
+                <h2>Lo que me gusta de ti</h2>
+                <ul>
+                    <li>Tus gustos musicales son maravillosos</li>
+                    <li>Me encanta tu forma de vestir</li>
+                    <li>Tu peinado alborotado es precioso XD</li>
+                    <li>Quizá algo raro, pero me gustan tus orejitas y ese piercing detrás de tu melena</li>
+                    <li>Que te gusten los juegos es un plus de esos raros</li>
+                    <li>Tu voz es muy linda</li>
+                    <li>Me facina tu altura</li>
+                    <li>Creo que eres muy valiente</li>
+                </ul>
+            </div>
+            
+            <div class="mensaje-card">
+                <i class="fas fa-gift icono"></i>
+                <h2>Nuestros Recuerdos</h2>
+                <ul>
+                    <li>El día que te me confesaste y yo ni cuenta hasta 5 horas después</li>
+                    <li>Casi te enveneno comiendo patatas xd</li>
+                    <li>Los helados y las desveladas</li>
+                    <li>Todas las veces que hablamos mal de alguien a las espaldas</li>
+                    <li>Las veces que armamos los cubos</li>
+                    <li>El día que nos colamos a la clase del Dylan</li>
+                    <li>Los Game Awards</li>
+                    <li>Iré actualizando esta sección jsjsj</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Sección de Música -->
+        <section class="musica-section">
+            <h2><i class="fas fa-music"></i> Nuestra Playlist Especial</h2>
+            
+            <div class="reproductor">
+                <!-- Información de la canción actual -->
+                <div class="song-info">
+                    <h3 id="currentSongTitle">Selecciona una canción</h3>
+                    <p id="currentSongArtist">Artista</p>
+                </div>
+                
+                <!-- Controles del reproductor -->
+                <div class="player-controls">
+                    <button id="prevBtn" class="control-btn" title="Anterior">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    
+                    <button id="playBtn" class="control-btn play-pause" title="Reproducir">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    
+                    <button id="pauseBtn" class="control-btn play-pause" style="display:none;" title="Pausar">
+                        <i class="fas fa-pause"></i>
+                    </button>
+                    
+                    <button id="nextBtn" class="control-btn" title="Siguiente">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                    
+                    <button id="stopBtn" class="control-btn" title="Detener">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+                
+                <!-- Barra de progreso -->
+                <div class="progress-container">
+                    <span id="currentTime">0:00</span>
+                    <div class="progress-bar">
+                        <div id="progress" class="progress"></div>
+                    </div>
+                    <span id="duration">0:00</span>
+                </div>
+                
+                <!-- Volumen -->
+                <div class="volume-container">
+                    <i class="fas fa-volume-up volume-icon"></i>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="50">
+                    <span id="volumePercent">50%</span>
+                </div>
+                
+                <!-- Lista de reproducción -->
+                <div class="playlist">
+                    <h4><i class="fas fa-list"></i> Playlist</h4>
+                    <div id="playlistItems">
+                        <!-- Las canciones se cargarán con JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Iframe de YouTube -->
+            <div class="youtube-container">
+                <iframe id="youtubePlayer" 
+                        width="100%" 
+                        height="200"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                        style="display: none;">
+                </iframe>
+            </div>
+        </section>
+
+        <!-- Galería de fotos -->
+        <section class="galeria">
+            <h2>Nuestra Historia en Imágenes</h2>
+            <div class="fotos">
+                <div class="foto-placeholder">📸 Foto 1</div>
+                <div class="foto-placeholder">📸 Foto 2</div>
+                <div class="foto-placeholder">📸 Foto 3</div>
+            </div>
+        </section>
+
+        <!-- Contador de tiempo juntos -->
+        <section class="contador">
+            <h2>Tiempo a tu lado</h2>
+            <div class="tiempo-container">
+                <div class="tiempo-item">
+                    <span id="dias">0</span>
+                    <p>Días juntos</p>
+                </div>
+                <div class="tiempo-item">
+                    <span id="horas">0</span>
+                    <p>Horas de felicidad</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mensaje final -->
+        <footer class="footer">
+            <p>Con todo mi amor,</p>
+            <p class="firma">Rafi</p>
+            <p class="fecha">21/05/2005</p>
+            <div class="corazones">
+                💙 💙 💙
+            </div>
+        </footer>
+    </div>
+
+    <!-- Elementos decorativos -->
+    <div class="decoracion globo">🎈</div>
+    <div class="decoracion confeti">🎊</div>
+    <div class="decoracion estrella">⭐</div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
