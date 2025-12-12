@@ -1,28 +1,25 @@
-// Playlist con tus canciones de YouTube (TUS PERSONALIZACIONES SE MANTIENEN)
+// Playlist con tus canciones locales (TUS PERSONALIZACIONES SE MANTIENEN)
 const playlist = [
     {
         id: 1,
         title: "Tu canción favorita",
         artist: "Hunter Metts",
         duration: "3:51",
-        youtubeId: "Np-84aF0gI0",
-        url: "https://www.youtube.com/watch?v=Np-84aF0gI0"
+        file: "assets/audio/Hunter Metts - Weathervane.mp3"
     },
     {
         id: 2,
         title: "La primera que te dediqué",
         artist: "No te va a gustar (Asi se llama la banda XD)",
         duration: "4:26",
-        youtubeId: "j7uxvgJcWqc",
-        url: "https://www.youtube.com/watch?v=j7uxvgJcWqc"
+        file: "assets/audio/No te va Gustar - A las Nueve.mp3"
     },
     {
         id: 3,
         title: "Hoy te dedico esta, VALUE",
         artist: "ADO (Mi cantante favorita)",
         duration: "3:44",
-        youtubeId: "5iAQF_q6FSk",
-        url: "https://www.youtube.com/watch?v=5iAQF_q6FSk"
+        file: "assets/audio/Ado - Value.mp3"
     }
 ];
 
@@ -31,7 +28,6 @@ let currentSongIndex = 0;
 let player;
 let isPlaying = false;
 let updateInterval;
-let playerFallback = false; // Nueva variable para detectar fallback
 
 // Elementos DOM (SE MANTIENE IGUAL)
 const elements = {
@@ -42,7 +38,7 @@ const elements = {
     prevBtn: document.getElementById('prevBtn'),
     nextBtn: document.getElementById('nextBtn'),
     stopBtn: document.getElementById('stopBtn'),
-    youtubePlayer: document.getElementById('youtubePlayer'),
+    audioPlayer: document.getElementById('audioPlayer'),
     playlistItems: document.getElementById('playlistItems'),
     progress: document.getElementById('progress'),
     currentTime: document.getElementById('currentTime'),
@@ -51,250 +47,62 @@ const elements = {
     volumePercent: document.getElementById('volumePercent')
 };
 
-// MODIFICADO: Sistema dual - Intenta API, si falla usa fallback
-function loadYouTubeAPI() {
-    console.log("Cargando reproductor...");
+// Inicializar reproductor de audio
+function initAudioPlayer() {
+    console.log("Inicializando reproductor de audio...");
     
-    // Intenta cargar la API primero
-    if (typeof YT !== 'undefined' && YT.loaded) {
-        initYouTubePlayer();
-        return;
-    }
+    player = elements.audioPlayer;
     
-    // Cargar script de YouTube API
-    const script = document.createElement('script');
-    script.src = 'https://www.youtube.com/iframe_api';
-    script.async = true;
+    // Cargar la primera canción
+    loadSong(currentSongIndex);
     
-    // Configurar timeout para fallback
-    const fallbackTimeout = setTimeout(() => {
-        console.log("Timeout: Usando modo fallback");
-        initFallbackPlayer();
-    }, 5000); // 5 segundos de espera
-    
-    script.onload = () => {
-        clearTimeout(fallbackTimeout);
-        console.log('YouTube API cargada, inicializando...');
-        
-        // Configurar callback
-        window.onYouTubeIframeAPIReady = () => {
-            setTimeout(initYouTubePlayer, 100);
-        };
-    };
-    
-    script.onerror = () => {
-        clearTimeout(fallbackTimeout);
-        console.log('Error cargando YouTube API, usando fallback');
-        initFallbackPlayer();
-    };
-    
-    document.head.appendChild(script);
-}
-
-// MODIFICADO: Inicializar con modo fallback automático
-function initYouTubePlayer() {
-    try {
-        // Verificar si la API está realmente disponible
-        if (typeof YT === 'undefined' || typeof YT.Player !== 'function') {
-            throw new Error('YouTube API no disponible');
-        }
-        
-        console.log("Inicializando YouTube Player API...");
-        
-        player = new YT.Player('youtubePlayer', {
-            height: '200',
-            width: '100%',
-            videoId: playlist[currentSongIndex].youtubeId,
-            playerVars: {
-                'autoplay': 0,
-                'controls': 0,
-                'fs': 0,
-                'iv_load_policy': 3,
-                'rel': 0,
-                'modestbranding': 1,
-                'playsinline': 1
-            },
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange,
-                'onError': onPlayerError
-            }
-        });
-        
-        console.log("YouTube Player creado exitosamente");
-        
-    } catch (error) {
-        console.error('Error inicializando YouTube Player:', error);
-        // Cambiar a modo fallback
-        initFallbackPlayer();
-    }
-}
-
-// NUEVO: Modo fallback para GitHub Pages
-function initFallbackPlayer() {
-    console.log("Iniciando modo fallback...");
-    playerFallback = true;
-    
-    // Ocultar elementos que no funcionarán
-    document.querySelector('.progress-container').style.display = 'none';
-    
-    // Crear iframe directo
-    const song = playlist[currentSongIndex];
-    const iframeHTML = `
-        <iframe 
-            width="100%" 
-            height="200"
-            src="https://www.youtube.com/embed/${song.youtubeId}?autoplay=0&controls=0&modestbranding=1&rel=0&fs=0"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen
-            style="border-radius: 10px;">
-        </iframe>
-    `;
-    
-    elements.youtubePlayer.innerHTML = iframeHTML;
-    elements.youtubePlayer.style.display = 'block';
-    
-    // Actualizar UI
-    updateSongInfo();
-    renderPlaylist();
-    setupFallbackListeners();
-    
-    // Mostrar mensaje informativo
-    showFallbackMessage();
-}
-
-// NUEVO: Mostrar mensaje de modo fallback
-function showFallbackMessage() {
-    const message = document.createElement('div');
-    message.className = 'fallback-message';
-    message.innerHTML = `
-        <p><i class="fas fa-info-circle"></i> Modo básico activado. Usa los controles de YouTube en el video.</p>
-    `;
-    message.style.cssText = `
-        background: #e3f2fd;
-        border: 2px solid #1e88e5;
-        border-radius: 10px;
-        padding: 10px;
-        margin: 10px 0;
-        text-align: center;
-        color: #0d47a1;
-        font-size: 0.9rem;
-    `;
-    
-    const container = document.querySelector('.youtube-container');
-    if (container) {
-        container.insertBefore(message, container.firstChild);
-    }
-}
-
-// NUEVO: Configurar listeners para modo fallback
-function setupFallbackListeners() {
-    // Para el modo fallback, los botones abren el video en YouTube
-    elements.playBtn.addEventListener('click', () => {
-        const song = playlist[currentSongIndex];
-        window.open(song.url, '_blank');
+    // Configurar eventos del audio
+    player.addEventListener('loadedmetadata', onAudioLoaded);
+    player.addEventListener('timeupdate', updateProgress);
+    player.addEventListener('ended', playNext);
+    player.addEventListener('play', () => {
+        isPlaying = true;
+        elements.playBtn.style.display = 'none';
+        elements.pauseBtn.style.display = 'flex';
+        elements.playBtn.classList.remove('playing');
+        elements.pauseBtn.classList.add('playing');
     });
-    
-    elements.pauseBtn.style.display = 'none'; // Ocultar pausa en fallback
-    
-    elements.prevBtn.addEventListener('click', () => {
-        currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
-        loadFallbackSong();
-    });
-    
-    elements.nextBtn.addEventListener('click', () => {
-        currentSongIndex = (currentSongIndex + 1) % playlist.length;
-        loadFallbackSong();
-    });
-    
-    elements.stopBtn.addEventListener('click', () => {
-        // Recargar iframe para "detener"
-        loadFallbackSong();
+    player.addEventListener('pause', () => {
+        isPlaying = false;
         elements.playBtn.style.display = 'flex';
         elements.pauseBtn.style.display = 'none';
+        elements.pauseBtn.classList.remove('playing');
     });
     
-    // Control de volumen deshabilitado en fallback
-    elements.volumeSlider.disabled = true;
-    elements.volumeSlider.title = "No disponible en modo básico";
-    elements.volumePercent.textContent = "YouTube";
-}
-
-// NUEVO: Cargar canción en modo fallback
-function loadFallbackSong() {
-    const song = playlist[currentSongIndex];
-    const iframe = elements.youtubePlayer.querySelector('iframe');
+    // Configurar volumen inicial
+    player.volume = elements.volumeSlider.value / 100;
+    elements.volumePercent.textContent = `${elements.volumeSlider.value}%`;
     
-    if (iframe) {
-        iframe.src = `https://www.youtube.com/embed/${song.youtubeId}?autoplay=0&controls=0&modestbranding=1&rel=0`;
-    }
-    
-    updateSongInfo();
-    updatePlaylistUI();
-}
-
-// MODIFICADO: Cuando el reproductor está listo (solo para API)
-function onPlayerReady(event) {
-    console.log("Reproductor de YouTube listo (API Mode)");
-    updateSongInfo();
-    elements.youtubePlayer.style.display = 'block';
-    
-    // Configurar volumen inicial solo si no es fallback
-    if (!playerFallback && player) {
-        player.setVolume(elements.volumeSlider.value);
-    }
-    
-    // Configurar eventos
+    // Configurar event listeners
     setupEventListeners();
     
     // Inicializar playlist
     renderPlaylist();
-}
-
-// NUEVO: Manejar errores del player
-function onPlayerError(event) {
-    console.error('Error en YouTube Player:', event.data);
     
-    // Si hay error grave, cambiar a fallback
-    if (event.data === 2 || event.data === 5 || event.data === 100) {
-        console.log("Cambiando a modo fallback debido a error...");
-        initFallbackPlayer();
-    }
+    console.log("Reproductor de audio inicializado");
 }
 
-// Estado del reproductor (solo para API) - SE MANTIENE IGUAL
-function onPlayerStateChange(event) {
-    if (playerFallback) return; // No usar en modo fallback
-    
-    switch(event.data) {
-        case YT.PlayerState.PLAYING:
-            isPlaying = true;
-            elements.playBtn.style.display = 'none';
-            elements.pauseBtn.style.display = 'flex';
-            elements.playBtn.classList.remove('playing');
-            elements.pauseBtn.classList.add('playing');
-            startProgressUpdate();
-            break;
-            
-        case YT.PlayerState.PAUSED:
-            isPlaying = false;
-            elements.playBtn.style.display = 'flex';
-            elements.pauseBtn.style.display = 'none';
-            elements.pauseBtn.classList.remove('playing');
-            stopProgressUpdate();
-            break;
-            
-        case YT.PlayerState.ENDED:
-            playNext();
-            break;
-    }
+// Cargar canción específica
+function loadSong(index) {
+    const song = playlist[index];
+    player.src = song.file;
+    player.load();
+    updateSongInfo();
 }
 
-// Configurar event listeners (solo para API) - SE MANTIENE IGUAL
+// Cuando el audio está cargado
+function onAudioLoaded() {
+    elements.duration.textContent = formatTime(player.duration);
+    elements.audioPlayer.style.display = 'block';
+}
+
+// Configurar event listeners
 function setupEventListeners() {
-    if (playerFallback) return;
-    
     // Botones de control
     elements.playBtn.addEventListener('click', playCurrent);
     elements.pauseBtn.addEventListener('click', pauseCurrent);
@@ -304,21 +112,19 @@ function setupEventListeners() {
     
     // Barra de progreso
     document.querySelector('.progress-bar').addEventListener('click', (e) => {
-        if (!player || !player.getDuration) return;
-        
         const rect = e.currentTarget.getBoundingClientRect();
         const clickX = e.clientX - rect.left;
         const width = rect.width;
         const percent = clickX / width;
-        const newTime = percent * player.getDuration();
+        const newTime = percent * player.duration;
         
-        player.seekTo(newTime, true);
+        player.currentTime = newTime;
     });
     
     // Control de volumen
     elements.volumeSlider.addEventListener('input', (e) => {
         const volume = e.target.value;
-        if (player) player.setVolume(volume);
+        player.volume = volume / 100;
         elements.volumePercent.textContent = `${volume}%`;
     });
 }
@@ -371,53 +177,36 @@ function updatePlaylistUI() {
     });
 }
 
-// Reproducir canción específica - MODIFICADO para ambos modos
+// Reproducir canción específica
 function playSong(index) {
     if (index < 0 || index >= playlist.length) return;
     
     currentSongIndex = index;
+    loadSong(index);
     
-    if (playerFallback) {
-        loadFallbackSong();
-    } else if (player && player.loadVideoById) {
-        const song = playlist[currentSongIndex];
-        player.loadVideoById({
-            videoId: song.youtubeId,
-            suggestedQuality: 'default'
-        });
-        updateSongInfo();
-        
-        // Actualizar botones
-        elements.playBtn.style.display = 'none';
-        elements.pauseBtn.style.display = 'flex';
-        elements.playBtn.classList.remove('playing');
-        elements.pauseBtn.classList.add('playing');
-    }
+    // Auto-play después de cargar
+    player.addEventListener('canplay', () => {
+        player.play();
+    }, { once: true });
 }
 
-// Funciones de control (solo para API) - SE MANTIENE IGUAL
+// Funciones de control
 function playCurrent() {
-    if (!playerFallback && player && player.playVideo) {
-        player.playVideo();
-    }
+    player.play();
 }
 
 function pauseCurrent() {
-    if (!playerFallback && player && player.pauseVideo) {
-        player.pauseVideo();
-    }
+    player.pause();
 }
 
 function stopCurrent() {
-    if (!playerFallback && player && player.stopVideo) {
-        player.stopVideo();
-        isPlaying = false;
-        elements.playBtn.style.display = 'flex';
-        elements.pauseBtn.style.display = 'none';
-        elements.pauseBtn.classList.remove('playing');
-        stopProgressUpdate();
-        resetProgress();
-    }
+    player.pause();
+    player.currentTime = 0;
+    isPlaying = false;
+    elements.playBtn.style.display = 'flex';
+    elements.pauseBtn.style.display = 'none';
+    elements.pauseBtn.classList.remove('playing');
+    resetProgress();
 }
 
 function playPrev() {
@@ -430,37 +219,19 @@ function playNext() {
     playSong(currentSongIndex);
 }
 
-// Funciones de progreso (solo para API) - SE MANTIENE IGUAL
-function startProgressUpdate() {
-    if (playerFallback) return;
-    stopProgressUpdate();
-    updateProgress();
-    updateInterval = setInterval(updateProgress, 1000);
-}
-
-function stopProgressUpdate() {
-    if (updateInterval) {
-        clearInterval(updateInterval);
-        updateInterval = null;
-    }
-}
-
+// Funciones de progreso
 function updateProgress() {
-    if (playerFallback || !player || !player.getCurrentTime || !player.getDuration) return;
+    if (!player || !player.duration) return;
     
-    try {
-        const current = player.getCurrentTime();
-        const total = player.getDuration();
+    const current = player.currentTime;
+    const total = player.duration;
+    
+    if (total > 0 && isFinite(total)) {
+        const percent = (current / total) * 100;
+        elements.progress.style.width = `${percent}%`;
         
-        if (total > 0 && isFinite(total)) {
-            const percent = (current / total) * 100;
-            elements.progress.style.width = `${percent}%`;
-            
-            elements.currentTime.textContent = formatTime(current);
-            elements.duration.textContent = formatTime(total);
-        }
-    } catch (error) {
-        console.log("Error actualizando progreso:", error);
+        elements.currentTime.textContent = formatTime(current);
+        elements.duration.textContent = formatTime(total);
     }
 }
 
@@ -495,7 +266,7 @@ function calcularTiempoJuntos() {
 document.addEventListener('click', function(e) {
     if (e.target.tagName === 'BUTTON' || 
         e.target.tagName === 'INPUT' || 
-        e.target.tagName === 'IFRAME' ||
+        e.target.tagName === 'AUDIO' ||
         e.target.closest('.control-btn') ||
         e.target.closest('.playlist-item')) {
         return;
@@ -523,8 +294,8 @@ document.addEventListener('click', function(e) {
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Iniciando página...");
     
-    // Inicializar reproductor (ahora con sistema dual)
-    loadYouTubeAPI();
+    // Inicializar reproductor de audio
+    initAudioPlayer();
     
     // Configurar volumen inicial
     if (elements.volumeSlider && elements.volumePercent) {
