@@ -17,19 +17,30 @@
         <!-- Encabezado -->
         <header class="header">
             <div class="dibujo-container">
-                <img src="assets/images/Cumple.jpg" alt="Foto especial" class="dibujo">
+                <div class="header-slider">
+                    <div class="header-slide active">
+                        <img src="assets/images/Cumple.jpg" alt="Foto especial" class="dibujo">
+                    </div>
+                    <div class="header-slide">
+                        <img src="assets/images/Navidad.jpg" alt="Feliz Navidad" class="dibujo">
+                    </div>
+                </div>
+                <button class="header-btn prev" id="headerPrevBtn">‹</button>
+                <button class="header-btn next" id="headerNextBtn">›</button>
+                <div class="header-indicadores">
+                    <span class="header-indicador activo" data-slide="0"></span>
+                    <span class="header-indicador" data-slide="1"></span>
+                </div>
                 <div class="corazon-flotante">💙</div>
             </div>
-            <h1 class="title">¡Feliz Cumpleaños <span class="nombre">Mon Amur</span>!</h1>
-            <p class="subtitle">El día más especial para la persona más especial</p>
+            <h1 class="title">¡Feliz Navidad <span class="nombre">Mon Amur</span>!</h1>
+            <p class="subtitle">Un sitio especial para mi persona favorita</p>
         </header>
-
-        <!-- Sección de mensajes -->
         <section class="mensajes">
             <div class="mensaje-card">
                 <i class="fas fa-heart icono"></i>
                 <h2>Para Carito:</h2>
-                <p>Como vez, ando presumiendo de la ingeniería haciendo este regalo muy especial solo para ti. Nunca creí encontrarme con una persona como tu, eres realmente maravillosa y aunque puede que el estudio no sea del todo tuyo, eso no le quita el merito a todo lo demás que puedes hacer, simplemente necesitas una guía, quizá yo no pueda serlo, pero estaré ahí para acompañarte siempre y cuando tu lo decidas. Te amo.</p>
+                <p>Esta vez no escribiré tanto texto jeje, te hice otro regalito y ahora puedes navegar entre los dibujitos que planeo ir haciendo. Espero que te guste, lo hice con todo el cariño del mundoooo. Feliz navidad Carito, de verdad que te amo un montonaso. Eres una personita increible.</p>
             </div>
             
             <div class="mensaje-card">
@@ -44,6 +55,9 @@
                     <li>Tu voz es muy linda</li>
                     <li>Me facina tu altura</li>
                     <li>Creo que eres muy valiente</li>
+                    <li>Me encanta tu compañía</li>
+                    <li>Tu risa es contagiosa</li>
+                    <li>Tus abrazos</li>
                 </ul>
             </div>
             
@@ -51,14 +65,16 @@
                 <i class="fas fa-gift icono"></i>
                 <h2>Nuestros Recuerdos</h2>
                 <ul>
-                    <li>El día que te me confesaste y yo ni cuenta hasta 5 horas después</li>
+                    <li>Nuestra visita al Eslaca</li>
+                    <li>El día que fuimos al Arena</li>
                     <li>Casi te enveneno comiendo patatas xd</li>
                     <li>Los helados y las desveladas</li>
                     <li>Todas las veces que hablamos mal de alguien a las espaldas</li>
                     <li>Las veces que armamos los cubos</li>
                     <li>El día que nos colamos a la clase del Dylan</li>
                     <li>Los Game Awards</li>
-                    <li>Iré actualizando esta sección jsjsj</li>
+                    <li>Los helados de pistacho</li>
+                    <li>La película de FNAF</li>
                 </ul>
             </div>
         </section>
@@ -125,16 +141,6 @@
             <!-- Reproductor de Audio -->
             <div class="youtube-container">
                 <audio id="audioPlayer" controls style="display: none;"></audio>
-            </div>
-        </section>
-
-        <!-- Galería de fotos -->
-        <section class="galeria">
-            <h2>Nuestra Historia en Imágenes</h2>
-            <div class="fotos">
-                <div class="foto-placeholder">📸 Foto 1</div>
-                <div class="foto-placeholder">📸 Foto 2</div>
-                <div class="foto-placeholder">📸 Foto 3</div>
             </div>
         </section>
 

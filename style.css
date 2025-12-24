@@ -41,6 +41,26 @@ body {
     border: 10px solid white;
 }
 
+.header-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.header-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.header-slide.active {
+    opacity: 1;
+}
+
 .dibujo {
     width: 100%;
     height: 100%;
@@ -50,6 +70,61 @@ body {
 
 .dibujo:hover {
     transform: scale(1.03);
+}
+
+.header-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: #1565c0;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.header-btn:hover {
+    background: white;
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.header-btn.prev {
+    left: 20px;
+}
+
+.header-btn.next {
+    right: 20px;
+}
+
+.header-indicadores {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+}
+
+.header-indicador {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.header-indicador.activo {
+    background: white;
+    transform: scale(1.2);
 }
 
 .corazon-flotante {
@@ -423,43 +498,6 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-/* Galería */
-.galeria {
-    margin-bottom: 50px;
-}
-
-.galeria h2 {
-    text-align: center;
-    color: #1565c0;
-    margin-bottom: 30px;
-    font-size: clamp(1.8rem, 6vw, 2.5rem);
-}
-
-.fotos {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-}
-
-.foto-placeholder {
-    background: linear-gradient(45deg, #90caf9, #bbdefb);
-    height: 150px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    color: white;
-    transition: all 0.3s;
-    cursor: pointer;
-    aspect-ratio: 1/1;
-}
-
-.foto-placeholder:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 20px rgba(30, 136, 229, 0.3);
-}
-
 /* Contador */
 .contador {
     text-align: center;
@@ -708,6 +746,12 @@ body {
         gap: 10px;
     }
     
+    .header-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+    
     .decoracion {
         display: none;
     }
@@ -749,14 +793,10 @@ body {
         height: 55px;
     }
     
-    .fotos {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-    
-    .foto-placeholder {
-        height: 120px;
-        font-size: 1.2rem;
+    .header-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
     }
     
     .footer {
@@ -786,33 +826,4 @@ body {
         gap: 15px;
         margin-bottom: 25px;
     }
-    /* Añade esto al final de tu style.css */
-.fallback-message {
-    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-    border: 2px solid #1e88e5;
-    border-radius: 15px;
-    padding: 15px;
-    margin: 15px 0;
-    text-align: center;
-    color: #0d47a1;
-    font-size: 0.95rem;
-    box-shadow: 0 5px 15px rgba(30, 136, 229, 0.2);
-    animation: aparecer 0.5s ease-out;
-}
-
-.fallback-message i {
-    color: #1e88e5;
-    margin-right: 10px;
-    font-size: 1.2rem;
-}
-
-/* Ocultar barra de progreso en modo fallback */
-.fallback-mode .progress-container {
-    display: none !important;
-}
-
-.fallback-mode .volume-container {
-    opacity: 0.5;
-    pointer-events: none;
-}
 }

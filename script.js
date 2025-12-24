@@ -318,6 +318,89 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log("Página inicializada");
 });
 
+// Función para inicializar el slider del header
+function initializeHeaderSlider() {
+    const slides = document.querySelectorAll('.header-slide');
+    const prevBtn = document.getElementById('headerPrevBtn');
+    const nextBtn = document.getElementById('headerNextBtn');
+    const indicadores = document.querySelectorAll('.header-indicador');
+    const dibujoContainer = document.querySelector('.dibujo-container');
+    
+    let currentSlide = 0;
+    let startX = 0;
+    let endX = 0;
+    
+    // Función para mostrar slide
+    function showSlide(index) {
+        if (index < 0) {
+            currentSlide = slides.length - 1;
+        } else if (index >= slides.length) {
+            currentSlide = 0;
+        } else {
+            currentSlide = index;
+        }
+        
+        // Ocultar todos los slides
+        slides.forEach(slide => slide.classList.remove('active'));
+        // Mostrar el slide actual
+        slides[currentSlide].classList.add('active');
+        
+        // Actualizar indicadores
+        indicadores.forEach((indicador, i) => {
+            indicador.classList.toggle('activo', i === currentSlide);
+        });
+    }
+    
+    // Event listeners para botones
+    prevBtn.addEventListener('click', () => {
+        showSlide(currentSlide - 1);
+    });
+    
+    nextBtn.addEventListener('click', () => {
+        showSlide(currentSlide + 1);
+    });
+    
+    // Event listeners para indicadores
+    indicadores.forEach((indicador, index) => {
+        indicador.addEventListener('click', () => {
+            showSlide(index);
+        });
+    });
+    
+    // Funcionalidad de deslizamiento táctil
+    dibujoContainer.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    }, { passive: true });
+    
+    dibujoContainer.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        handleSwipe();
+    }, { passive: true });
+    
+    function handleSwipe() {
+        const diffX = startX - endX;
+        const threshold = 50; // Mínima distancia para considerar un swipe
+        
+        if (Math.abs(diffX) > threshold) {
+            if (diffX > 0) {
+                // Swipe izquierda - siguiente imagen
+                showSlide(currentSlide + 1);
+            } else {
+                // Swipe derecha - imagen anterior
+                showSlide(currentSlide - 1);
+            }
+        }
+    }
+    
+    // Mostrar primer slide
+    showSlide(0);
+}
+
+// Inicializar slider del header cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    initializeHeaderSlider();
+});
+
 // Manejar errores
 window.addEventListener('error', function(e) {
     console.error('Error en la página:', e.message);
