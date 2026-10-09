@@ -7,11 +7,74 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    background: linear-gradient(180deg, #0a1733 0%, #13295b 45%, #1c3d7d 100%);
     color: #1a237e;
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+}
+
+/* Cielo de fondo estilo Van Gogh */
+.cielo {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.cielo svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.pinceladas path {
+    stroke-dasharray: 70 14 28 10 45 18;
+    animation: pincelada 30s linear infinite;
+}
+
+.pinceladas path:nth-child(2n) {
+    stroke-dasharray: 34 9 60 16 20 8;
+    animation-duration: 38s;
+}
+
+.pinceladas path:nth-child(3n) {
+    stroke-dasharray: 90 20 40 12;
+    animation-duration: 45s;
+}
+
+.remolino path {
+    stroke-dasharray: 55 12 30 10;
+}
+
+.remolino {
+    transform-origin: 720px 280px;
+    animation: remolinear 60s linear infinite;
+}
+
+.estrella-vg {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: titilar 4s ease-in-out infinite;
+    animation-delay: var(--d);
+}
+
+@keyframes pincelada {
+    to { stroke-dashoffset: -580; }
+}
+
+@keyframes remolinear {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes titilar {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .pinceladas path, .remolino, .estrella-vg { animation: none; }
 }
 
 /* Contenedor principal */
@@ -37,7 +100,7 @@ body {
     margin: 0 auto 30px;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 20px 40px rgba(21, 101, 192, 0.2);
+    box-shadow: 0 0 40px rgba(245, 215, 110, 0.25), 0 20px 40px rgba(0, 0, 0, 0.35);
     border: 10px solid white;
 }
 
@@ -64,7 +127,8 @@ body {
 .dibujo {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    background: white;
     transition: transform 0.5s;
 }
 
@@ -139,21 +203,21 @@ body {
 .title {
     font-family: 'Dancing Script', cursive;
     font-size: clamp(2.5rem, 8vw, 4rem);
-    color: #1565c0;
+    color: #f5e6a8;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    text-shadow: 0 0 18px rgba(245, 215, 110, 0.35), 2px 2px 4px rgba(0,0,0,0.4);
     line-height: 1.2;
 }
 
 .nombre {
-    color: #0d47a1;
+    color: #f7d75e;
     display: inline-block;
     animation: latirNombre 2s infinite;
 }
 
 .subtitle {
     font-size: clamp(1rem, 4vw, 1.3rem);
-    color: #546e7a;
+    color: #c9d9f5;
     font-weight: 300;
     padding: 0 10px;
 }
@@ -483,6 +547,58 @@ body {
     font-size: 0.85rem;
 }
 
+.playlist-song {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: #1e88e5;
+    background: #e3f2fd;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+
+.playlist-song i {
+    margin-right: 3px;
+}
+
+.playlist-info .playlist-lyric {
+    margin-top: 6px;
+    font-style: italic;
+    color: #1565c0;
+}
+
+.playlist-info .playlist-live-lyric {
+    margin-top: 8px;
+    padding: 6px 10px;
+    background: white;
+    border-left: 3px solid #1e88e5;
+    border-radius: 6px;
+    color: #0d47a1;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.playlist-live-lyric span {
+    white-space: pre-line;
+    display: inline-block;
+    vertical-align: top;
+    line-height: 1.5;
+}
+
+.playlist-live-lyric i {
+    color: #1e88e5;
+    margin-right: 4px;
+}
+
+.playlist-live-lyric.cambio {
+    animation: aparecer 0.4s ease-out;
+}
+
+.playlist-info .playlist-translation {
+    font-size: 0.8rem;
+    color: #78909c;
+}
+
 .playlist-duration {
     color: #1e88e5;
     font-weight: 600;
@@ -498,6 +614,219 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
+/* Nuestra Historia */
+.historia-section {
+    background: linear-gradient(135deg, #e8f4fe 0%, #d4e9fb 100%);
+    border-radius: 25px;
+    padding: 30px;
+    margin: 40px 0;
+    border: 3px solid #bbdefb;
+    box-shadow: 0 15px 35px rgba(30, 136, 229, 0.15);
+}
+
+.historia-section h2 {
+    text-align: center;
+    color: #1565c0;
+    font-size: 2.2rem;
+    margin-bottom: 8px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+}
+
+.historia-section h2 i {
+    margin-right: 15px;
+    color: #1e88e5;
+}
+
+.historia-intro {
+    text-align: center;
+    color: #546e7a;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+
+/* Pestañas de meses */
+.historia-tabs {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 5px 2px 12px;
+    margin-bottom: 15px;
+    scrollbar-width: thin;
+    scrollbar-color: #90caf9 transparent;
+}
+
+.historia-tab {
+    flex-shrink: 0;
+    background: white;
+    border: 2px solid #e3f2fd;
+    color: #1565c0;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.historia-tab:hover {
+    border-color: #1e88e5;
+}
+
+.historia-tab.activo {
+    background: linear-gradient(145deg, #1e88e5, #1565c0);
+    border-color: #1565c0;
+    color: white;
+    box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
+}
+
+/* Ventana de chat */
+.chat {
+    max-width: 650px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(30, 136, 229, 0.15);
+    border: 2px solid #e3f2fd;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 18px;
+    background: linear-gradient(145deg, #1e88e5, #1565c0);
+    color: white;
+}
+
+.chat-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.chat-info h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+}
+
+.chat-info p {
+    font-size: 0.8rem;
+    opacity: 0.9;
+}
+
+.chat-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 18px 14px;
+    height: 520px;
+    overflow-y: auto;
+    background-color: #eaf4fd;
+    background-image: radial-gradient(rgba(30, 136, 229, 0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+.chat-cuerpo.animar {
+    animation: aparecer 0.5s ease-out;
+}
+
+.chat-fecha {
+    align-self: center;
+    background: #d6e9fb;
+    color: #37474f;
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 8px;
+    margin: 12px 0 4px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.chat-momento {
+    align-self: center;
+    background: #fffbe6;
+    color: #5d4037;
+    font-size: 0.78rem;
+    padding: 4px 12px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.chat-burbuja {
+    position: relative;
+    max-width: 78%;
+    padding: 7px 10px 6px;
+    border-radius: 10px;
+    font-size: 0.92rem;
+    line-height: 1.4;
+    color: #263238;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    word-wrap: break-word;
+}
+
+.chat-burbuja.carito {
+    align-self: flex-start;
+    background: white;
+    border-top-left-radius: 2px;
+}
+
+.chat-burbuja.rafi {
+    align-self: flex-end;
+    background: #cfe6fc;
+    border-top-right-radius: 2px;
+}
+
+.chat-texto {
+    white-space: pre-wrap;
+}
+
+.chat-hora {
+    display: block;
+    text-align: right;
+    font-size: 0.68rem;
+    color: #78909c;
+    margin-top: 2px;
+}
+
+.chat-nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    background: #f8fdff;
+    border-top: 2px solid #e3f2fd;
+}
+
+.chat-nav-btn {
+    background: linear-gradient(145deg, #1e88e5, #1565c0);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.chat-nav-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(30, 136, 229, 0.3);
+}
+
+.chat-nav-btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
 /* Contador */
 .contador {
     text-align: center;
@@ -505,7 +834,8 @@ body {
 }
 
 .contador h2 {
-    color: #1565c0;
+    color: #f5e6a8;
+    text-shadow: 0 0 14px rgba(245, 215, 110, 0.3);
     margin-bottom: 25px;
     font-size: clamp(1.8rem, 6vw, 2.5rem);
 }
@@ -650,12 +980,12 @@ body {
 @keyframes latirNombre {
     0%, 100% {
         transform: scale(1);
-        color: #0d47a1;
+        color: #f7d75e;
     }
     50% {
         transform: scale(1.05);
-        color: #1e88e5;
-        text-shadow: 0 0 15px rgba(30, 136, 229, 0.3);
+        color: #fff1b8;
+        text-shadow: 0 0 18px rgba(247, 215, 94, 0.6);
     }
 }
 
@@ -754,6 +1084,22 @@ body {
     
     .decoracion {
         display: none;
+    }
+
+    .historia-section {
+        padding: 20px 12px;
+    }
+
+    .historia-section h2 {
+        font-size: 1.8rem;
+    }
+
+    .chat-cuerpo {
+        height: 460px;
+    }
+
+    .chat-burbuja {
+        max-width: 85%;
     }
 }
 
